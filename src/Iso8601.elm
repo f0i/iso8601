@@ -1,22 +1,58 @@
-module Iso8601 exposing (Mode(..), toString, toUtcString)
+module Iso8601 exposing
+    ( toString, toUtcString
+    , Mode(..)
+    )
+
+{-| Format a posix time to a ISO8601 String.
+
+
+# Functions
+
+@docs toString, toUtcString
+
+
+# Mode for different precission
+
+@docs Mode
+
+-}
 
 import Time exposing (Month, Posix, Zone)
 
 
+{-| The precission of the resulting String can be defined by the Mode parameter
+
+The resulting string will have the following format
+
+  - Year: "YYYY"
+  - Month: "YYYY-MM"
+  - Day: "YYYY-MM-DD"
+  - Hour: "YYYY-MM-DDThh"
+  - Minute: "YYYY-MM-DDThh-mm"
+  - Second: "YYYY-MM-DDThh-mm-ss"
+  - Milli: "YYYY-MM-DDThh-mm-ss.sss"
+  - HourOnly: "hh"
+  - HourMinute: "hh-mm"
+  - HourSecond: "hh-mm-ss"
+  - HourMilli: "hh-mm-ss.sss"
+
+-}
 type Mode
     = Year
-    | Milli
-    | Second
-    | Minute
-    | Hour
-    | Day
     | Month
-    | HourMilli
-    | HourSecond
-    | HourMinute
+    | Day
+    | Hour
+    | Minute
+    | Second
+    | Milli
     | HourOnly
+    | HourMinute
+    | HourSecond
+    | HourMilli
 
 
+{-| Format a String without timezone offset
+-}
 toUtcString : Mode -> Posix -> String
 toUtcString mode time =
     toString mode Time.utc time
