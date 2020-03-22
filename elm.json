@@ -3,23 +3,20 @@
     "name": "f0i/iso8601",
     "summary": "Format elm/time posix time as an ISO8601 strings",
     "license": "BSD-3-Clause",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "exposed-modules": [
-      "Iso8601"
-    ],
-    "source-directories": [
-        "src"
+        "Iso8601"
     ],
     "elm-version": "0.19.0 <= v < 0.20.0",
     "dependencies": {
-            "elm/core": "1.0.0 <= v < 2.0.0",
-            "elm/json": "1.0.0 <= v < 2.0.0",
-            "elm/time": "1.0.0 <= v < 2.0.0"
+        "elm/core": "1.0.0 <= v < 2.0.0",
+        "elm/json": "1.0.0 <= v < 2.0.0",
+        "elm/time": "1.0.0 <= v < 2.0.0"
     },
     "test-dependencies": {
-            "elm-explorations/test": "1.0.0 <= v < 2.0.0",
-            "elm/html": "1.0.0 <= v < 2.0.0",
-            "elm/random": "1.0.0 <= v < 2.0.0",
-            "elm/virtual-dom": "1.0.0 <= v < 2.0.0"
+        "elm/html": "1.0.0 <= v < 2.0.0",
+        "elm/random": "1.0.0 <= v < 2.0.0",
+        "elm/virtual-dom": "1.0.0 <= v < 2.0.0",
+        "elm-explorations/test": "1.0.0 <= v < 2.0.0"
     }
 }
