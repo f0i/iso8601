@@ -1,6 +1,12 @@
 module Iso8601 exposing
-    ( toString, toUtcString, toTuple
+    ( toUtcString
+    , toUtcDateString, toUtcTimeString, toUtcTimeMilliString
+    , toUtcDateTimeString, toUtcDateTimeMilliString
+    , toString
+    , toDateString, toTimeString, toTimeMilliString
+    , toDateTimeString, toDateTimeMilliString
     , Mode(..)
+    , toTuple
     )
 
 {-| Format a posix time to a ISO8601 String.
@@ -10,20 +16,28 @@ None of the generated Strings include timezone postfix.
 
 # UTC strings
 
-@docs toString, toUtcString, toTuple
+@docs toUtcString
+
+@docs toUtcDateString, toUtcTimeString, toUtcTimeMilliString
+@docs toUtcDateTimeString, toUtcDateTimeMilliString
 
 
 # Custom timezone
 
+@docs toString
 
-# Manual precission
-
-@docs toString, toTuple
+@docs toDateString, toTimeString, toTimeMilliString
+@docs toDateTimeString, toDateTimeMilliString
 
 
 ## Mode for different precission
 
 @docs Mode
+
+
+# Custom format helper
+
+@docs toTuple
 
 -}
 
@@ -215,14 +229,6 @@ monthToS month =
             "12"
 
 
-defaultSeperator =
-    { date = "-"
-    , time = ":"
-    , dateTime = "T"
-    , millis = "."
-    }
-
-
 {-| Convert a posix time into a ISO8601 string
 -}
 toString : Mode -> Zone -> Posix -> String
@@ -323,6 +329,16 @@ toTimeTuple zone time =
 
 
 {-| Get a tuple containg strings for all date string parts
+
+This can be used to quickly imlement your own format:
+
+    timeToString time =
+        let
+            ( ( year, month, day ), ( hour, minute, second ), ms ) =
+                toTuple time
+        in
+        year ++ "/" ++ month ++ "/" ++ day ++ " " ++ hour ++ "_" ++ minute ++ "!"
+
 -}
 toTuple : Zone -> Posix -> ( ( String, String, String ), ( String, String, String ), String )
 toTuple zone time =
