@@ -1,17 +1,27 @@
 module Iso8601 exposing
-    ( toString, toUtcString
+    ( toString, toUtcString, toTuple
     , Mode(..)
     )
 
 {-| Format a posix time to a ISO8601 String.
 
-
-# Functions
-
-@docs toString, toUtcString
+None of the generated Strings include timezone postfix.
 
 
-# Mode for different precission
+# UTC strings
+
+@docs toString, toUtcString, toTuple
+
+
+# Custom timezone
+
+
+# Manual precission
+
+@docs toString, toTuple
+
+
+## Mode for different precission
 
 @docs Mode
 
@@ -28,13 +38,13 @@ The resulting string will have the following format
   - Month: "YYYY-MM"
   - Day: "YYYY-MM-DD"
   - Hour: "YYYY-MM-DDThh"
-  - Minute: "YYYY-MM-DDThh-mm"
-  - Second: "YYYY-MM-DDThh-mm-ss"
-  - Milli: "YYYY-MM-DDThh-mm-ss.sss"
+  - Minute: "YYYY-MM-DDThh:mm"
+  - Second: "YYYY-MM-DDThh:mm:ss"
+  - Milli: "YYYY-MM-DDThh:mm:ss.sss"
   - HourOnly: "hh"
-  - HourMinute: "hh-mm"
-  - HourSecond: "hh-mm-ss"
-  - HourMilli: "hh-mm-ss.sss"
+  - HourMinute: "hh:mm"
+  - HourSecond: "hh:mm:ss"
+  - HourMilli: "hh:mm:ss.sss"
 
 -}
 type Mode
@@ -51,11 +61,91 @@ type Mode
     | HourMilli
 
 
+{-| Custom seperators
+-}
+type alias Seperator =
+    { date : String
+    , time : String
+    , dateTime : String
+    , millis : String
+    }
+
+
+{-| Format a date ("YYYY-MM-DD")
+-}
+toDateString : Zone -> Posix -> String
+toDateString zone time =
+    time |> toString Day zone
+
+
+{-| Format a time ("hh:mm:ss")
+-}
+toTimeString : Zone -> Posix -> String
+toTimeString zone time =
+    time |> toString HourSecond zone
+
+
+{-| Format a time including millis ("hh:mm:ss.sss")
+-}
+toTimeMilliString : Zone -> Posix -> String
+toTimeMilliString zone time =
+    time |> toString HourMilli zone
+
+
+{-| Format a date time ("YYYY-MM-DDThh:mm:ss")
+-}
+toDateTimeString : Zone -> Posix -> String
+toDateTimeString zone time =
+    time |> toString Second zone
+
+
+{-| Format a time including millis ("YYYY-MM-DDThh:mm:ss.sss")
+-}
+toDateTimeMilliString : Zone -> Posix -> String
+toDateTimeMilliString zone time =
+    time |> toString Milli zone
+
+
 {-| Format a String without timezone offset
 -}
 toUtcString : Mode -> Posix -> String
 toUtcString mode time =
     toString mode Time.utc time
+
+
+{-| Format a date ("YYYY-MM-DD")
+-}
+toUtcDateString : Posix -> String
+toUtcDateString time =
+    time |> toString Day Time.utc
+
+
+{-| Format a time ("hh:mm:ss")
+-}
+toUtcTimeString : Posix -> String
+toUtcTimeString time =
+    time |> toString HourSecond Time.utc
+
+
+{-| Format a time including millis ("hh:mm:ss.sss")
+-}
+toUtcTimeMilliString : Posix -> String
+toUtcTimeMilliString time =
+    time |> toString HourMilli Time.utc
+
+
+{-| Format a date time ("YYYY-MM-DDThh:mm:ss")
+-}
+toUtcDateTimeString : Posix -> String
+toUtcDateTimeString time =
+    time |> toString Second Time.utc
+
+
+{-| Format a time including millis ("YYYY-MM-DDThh:mm:ss.sss")
+-}
+toUtcDateTimeMilliString : Posix -> String
+toUtcDateTimeMilliString time =
+    time |> toString Milli Time.utc
 
 
 {-| convert a positive integer into a string of at least two digits
@@ -83,6 +173,8 @@ iToS3 i =
         String.fromInt i
 
 
+{-| Convert a Time.Month to a number string
+-}
 monthToS : Month -> String
 monthToS month =
     case month of
@@ -121,6 +213,14 @@ monthToS month =
 
         Time.Dec ->
             "12"
+
+
+defaultSeperator =
+    { date = "-"
+    , time = ":"
+    , dateTime = "T"
+    , millis = "."
+    }
 
 
 {-| Convert a posix time into a ISO8601 string
@@ -186,3 +286,48 @@ toString mode zone time =
             (time |> toString Day zone)
                 ++ "T"
                 ++ (time |> toString HourMilli zone)
+
+
+{-| Get a tuple containg strings for year, month and date
+-}
+toDateTuple : Zone -> Posix -> ( String, String, String )
+toDateTuple zone time =
+    let
+        yyyy =
+            time |> Time.toYear zone |> String.fromInt
+
+        mm =
+            time |> Time.toMonth zone |> monthToS
+
+        dd =
+            time |> Time.toDay zone |> iToS2
+    in
+    ( yyyy, mm, dd )
+
+
+{-| Get a tuple containg strings for hour minute and second
+-}
+toTimeTuple : Zone -> Posix -> ( String, String, String )
+toTimeTuple zone time =
+    let
+        hh =
+            time |> Time.toHour zone |> iToS2
+
+        mm =
+            time |> Time.toMinute zone |> iToS2
+
+        ss =
+            time |> Time.toSecond zone |> iToS2
+    in
+    ( hh, mm, ss )
+
+
+{-| Get a tuple containg strings for all date string parts
+-}
+toTuple : Zone -> Posix -> ( ( String, String, String ), ( String, String, String ), String )
+toTuple zone time =
+    let
+        ms =
+            time |> Time.toMillis zone |> iToS3
+    in
+    ( toDateTuple zone time, toTimeTuple zone time, ms )

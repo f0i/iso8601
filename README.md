@@ -2,7 +2,7 @@
 
 Format a [posix time](https://package.elm-lang.org/packages/elm/time/latest/) to a ISO8601 String.
 
-This package is intended to format time stamps for user interfaces with differnt precission.
+This package is intended to format time stamps for user interfaces with custom precision.
 
 ## Install
 

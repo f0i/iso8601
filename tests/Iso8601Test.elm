@@ -11,6 +11,10 @@ time =
     Time.millisToPosix 1584875883199
 
 
+time2 =
+    Time.millisToPosix 1588082963012
+
+
 suite : Test
 suite =
     describe "The Iso8601 module"
@@ -61,5 +65,13 @@ suite =
                     time
                         |> Iso8601.toUtcString Iso8601.HourMilli
                         |> Expect.equal "11:18:03.199"
+            ]
+        , describe "Tuples"
+            [ test "toTuple" <|
+                \_ ->
+                    time2
+                        |> Iso8601.toTuple Time.utc
+                        |> Expect.equal
+                            ( ( "2020", "04", "28" ), ( "14", "09", "23" ), "012" )
             ]
         ]
