@@ -28,7 +28,7 @@ time =
 
 -- this will format the time as "2020-03-22T11:18:03.199"
 milli =
-    Iso8601.toUtcString Iso8601.Milli time
+    Iso8601.toUtcMilliString time
 
 -- this will format the time as "2020-03-22T11:18"
 minute =
@@ -37,4 +37,14 @@ minute =
 -- this will format the time as "11:18:03"
 hourToSecond =
     Iso8601.toUtcString Iso8601.HourSecond time
+
+-- or get each part of the String as Tuple to create a custom format
+custom =
+    let
+        ( ( year, month, day ), ( hour, minute, second ), ms ) =
+            Iso8601.toTuple time
+    in
+    year ++ "/" ++ month ++ "/" ++ day ++ " " ++ hour ++ "_" ++ minute ++ "!"
 ```
+
+A complete list of the helper functions can be found in the [Iso8601 module docs](Iso8601).

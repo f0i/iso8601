@@ -3,7 +3,7 @@
     "name": "f0i/iso8601",
     "summary": "Format elm/time posix time as an ISO8601 strings for humans",
     "license": "BSD-3-Clause",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "exposed-modules": [
         "Iso8601"
     ],
