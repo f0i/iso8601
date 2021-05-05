@@ -47,4 +47,5 @@ custom =
     year ++ "/" ++ month ++ "/" ++ day ++ " " ++ hour ++ "_" ++ minute ++ "!"
 ```
 
-A complete list of the helper functions can be found in the [Iso8601 module docs](Iso8601).
+A complete list of the helper functions can be found in the
+[Iso8601 module docs](Iso8601).
